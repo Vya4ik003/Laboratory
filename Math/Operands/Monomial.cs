@@ -20,7 +20,7 @@ namespace Math.Operands
 
         public override string ToString()
         {
-            return Coefficient.ToString() + Variable.ToString();
+            return  Coefficient.ToString() + Variable.ToString();
         }
 
         #region Operators

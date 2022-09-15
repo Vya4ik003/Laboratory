@@ -10,11 +10,18 @@ namespace Math.Operands
         public Polynomial(params Monomial[] monomials)
         {
             Monomials = monomials.ToList();
+            PrimarySimplify();
         }
 
         public Polynomial(List<Monomial> monomials)
         {
             Monomials = monomials;
+            PrimarySimplify();
+        }
+
+        private void PrimarySimplify()
+        {
+            Monomials.RemoveAll(_ => _.Coefficient.Value == 0);
         }
 
         public Polynomial Simplify()
@@ -43,6 +50,8 @@ namespace Math.Operands
             string result = "";
 
             Monomials.ForEach(_ => result += _);
+
+            result = result.Trim('+');
 
             return result;
         }
