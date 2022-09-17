@@ -15,7 +15,6 @@ namespace TestUI
 
             Console.WriteLine(polynomial);
             Console.WriteLine(polynomial.Simplify());
-
         }
     }
 }

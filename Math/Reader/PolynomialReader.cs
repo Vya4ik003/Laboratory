@@ -3,48 +3,37 @@ using System.Linq;
 
 namespace Math.Reader
 {
-    public class PolynomialReader
+    public class PolynomialReader : Reader<Polynomial>
     {
-        private readonly string _input;
-        private int _index = 0;
+        protected override string Input { get; }
+        private readonly MonomialReader _monomialReader;
 
         public PolynomialReader(string input)
         {
-            _input = input;
+            string formattedInput = FormatInput(input);
+            Input = formattedInput;
+            _monomialReader = new MonomialReader(formattedInput);
         }
 
-        public bool IsEnd()
+        private string FormatInput(string input)
         {
-            return _index >= _input.Length - 1;
-        }
-
-        private Monomial ReadMonomial()
-        {
-            string line = "";
-
-            while (!IsEnd() && _input[_index + 1] != '+' && _input[_index + 1] != '-')
-            {
-                line += _input[_index++];
-            }
-            line += _input[_index++];
-
-            char varName = line.Where(_ => char.IsLetter(_)).ToArray().FirstOrDefault();
-            string coeffString = "";
-            line.Where(_ => char.IsDigit(_) || _ == '+' || _ == '-').ToList().ForEach(_ => coeffString += _);
-            int coeff = int.Parse(coeffString);
-
-            Monomial result = new Monomial(varName, coeff);
+            string result = input.Replace(" ", "");
 
             return result;
         }
 
-        public Polynomial Read()
+        public override bool IsEnd()
+        {
+            return _monomialReader.IsEnd();
+        }
+
+        public override Polynomial Read()
         {
             Polynomial polynomial = new Polynomial();
 
             while (!IsEnd())
             {
-                Monomial monomial = ReadMonomial();
+                Monomial monomial = _monomialReader.Read();
                 polynomial.Monomials.Add(monomial);
             }
 

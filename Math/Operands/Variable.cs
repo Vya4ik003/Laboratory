@@ -10,6 +10,8 @@ namespace Math.Operands
             Symbol = symbol;
         }
 
+        #region overrided methods
+
         public override string ToString()
         {
             return "" + Symbol;
@@ -24,6 +26,8 @@ namespace Math.Operands
         {
             return base.GetHashCode();
         }
+
+        #endregion
 
         #region Operators
 
