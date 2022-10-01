@@ -1,54 +1,56 @@
-﻿
+﻿using System;
+
 namespace Math.Operands
 {
     public class Monomial
     {
-        internal Variable Variable { get; set; }
-        internal Number Coefficient { get; set; }
-        internal Number Power { get; set; }
+        public Variable Variable { get; set; }
+        public Number Coefficient { get; set; }
 
         public Monomial(char var, int coeff)
         {
-            Variable = new Variable(var);
+            Variable = new Variable(var, 1);
             Coefficient = new Number(coeff);
-            Power = new Number(1);
         }
 
         public Monomial(char var, int coeff, int power)
         {
-            Variable = new Variable(var);
+            Variable = new Variable(var, power);
             Coefficient = new Number(coeff);
-            Power = new Number(power);
         }
 
         internal Monomial(Variable var, Number coeff)
         {
             Variable = var;
             Coefficient = coeff;
-            Power = new Number(1);
         }
 
         internal Monomial(Variable var, Number coeff, Number power)
         {
             Variable = var;
             Coefficient = coeff;
-            Power = power;
         }
 
         public bool IsSame(Monomial monomial)
         {
             return Variable == monomial.Variable &&
-                Power == monomial.Power;
+                Variable.Power == monomial.Variable.Power;
+        }
+
+        public string ToStringSimplified()
+        {
+            return (MathF.Abs(Coefficient.Value) == 1 ? (Coefficient < 0 ? "-" : "+") : Coefficient.ToString()) +
+            (Variable.Power == 0 ? ""
+            : Variable.ToString() + (Variable.Power == 1 ? "" : "^" +
+            (Variable.Power >= 0 ? Variable.Power.ToString().Trim('+') : Variable.Power.ToString())));
         }
 
         #region overrided methods
 
         public override string ToString()
         {
-            return Coefficient.ToString() +
-                (Power == 0 ? "1" : Variable.ToString()) +
-                (Power == 1 ? "" : "^" +
-                (Power > 0 ? Power.ToString().Trim('+') : Power.ToString()));
+            return Coefficient.ToString() + Variable.ToString() + '^' +
+                (Variable.Power >= 0 ? Variable.Power.ToString().Trim('+') : Variable.Power.ToString());
         }
 
         public override bool Equals(object obj)
@@ -68,10 +70,10 @@ namespace Math.Operands
         public static Polynomial operator +(Monomial leftOperand, Monomial rightOperand)
         {
             if (leftOperand.Variable.Symbol == rightOperand.Variable.Symbol &&
-                leftOperand.Power == rightOperand.Power)
+                leftOperand.Variable.Power == rightOperand.Variable.Power)
             {
                 Number newCoeff = leftOperand.Coefficient + rightOperand.Coefficient;
-                Number power = leftOperand.Power;
+                Number power = leftOperand.Variable.Power;
                 Monomial result = new Monomial(leftOperand.Variable, newCoeff, power);
                 return new Polynomial(result);
             }

@@ -2,7 +2,7 @@
 
 namespace Math.Reader
 {
-    internal class PowerReader : Reader<Number>
+    public class PowerReader : Reader<Number>
     {
         protected override string Input { get; }
         protected int Index { get; set; }
@@ -23,7 +23,7 @@ namespace Math.Reader
             Number result = new Number(1);
             if (parts.Length > 1)
             {
-                int power = ((parts[1] != "") ? int.Parse(parts[1]) : 1);
+                int power = (parts[1] != "") ? int.Parse(parts[1]) : 1;
                 result.Value = power;
             }
 

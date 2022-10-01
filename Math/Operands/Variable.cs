@@ -1,13 +1,17 @@
 ﻿
+using System.Linq.Expressions;
+
 namespace Math.Operands
 {
-    internal class Variable
+    public class Variable
     {
         public char Symbol { get; set; }
+        public Number Power { get; set; }
 
-        public Variable(char symbol)
+        public Variable(char symbol, int power = 0)
         {
             Symbol = symbol;
+            Power = new Number(power);
         }
 
         #region overrided methods

@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Math.Reader
 {
-    internal class MonomialReader : Reader<Monomial>
+    public class MonomialReader : Reader<Monomial>
     {
         protected override string Input { get; }
         protected int Index { get; set; }
@@ -15,6 +15,7 @@ namespace Math.Reader
         public MonomialReader(string input)
         {
             Input = input;
+            Input.Append('\0');
         }
 
         public override bool IsEnd()
@@ -35,11 +36,22 @@ namespace Math.Reader
             _numberReader = new NumberReader(line);
             Number coeff = _numberReader.Read();
 
-            _variableReader = new VariableReader(line);
-            Variable var = _variableReader.Read();
+            Variable var = new Variable('\0');
+            if (line.Where(_ => char.IsLetter(_) || _ == '\0').Count() > 0)
+            {
+                _variableReader = new VariableReader(line);
+                var = _variableReader.Read();
+            }
 
-            _powerReader = new PowerReader(line);
-            Number power = _powerReader.Read();
+            Number power = new Number(1);
+            if (line.Where(_ => _ == '^').Count() > 0)
+            {
+                _powerReader = new PowerReader(line);
+                power = _powerReader.Read();
+            }
+            var.Power = power;
+            if (var.Symbol == '\0')
+                var.Power = new Number(0);
 
             Monomial result = new Monomial(var, coeff, power);
 

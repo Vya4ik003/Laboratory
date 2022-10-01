@@ -1,8 +1,9 @@
 ﻿using Math.Operands;
+using System.Linq;
 
 namespace Math.Reader
 {
-    internal class NumberReader : Reader<Number>
+    public class NumberReader : Reader<Number>
     {
         protected override string Input { get; }
         protected int Index { get; set; }
@@ -14,23 +15,29 @@ namespace Math.Reader
 
         public override bool IsEnd()
         {
-            return Index >= Input.Length - 1;
+            //bool eol = Index >= Input.Length - 1;
+            bool isVar = (!char.IsDigit(Input[Index]) && Input[Index] != '^' && Input[Index] != '-' && Input[Index] != '+')
+                || Input[Index] == '\0';
+
+            return isVar;
         }
 
         public override Number Read()
         {
             string line = "";
 
-            while ((char.IsDigit(Input[Index]) 
-                || Input[Index] == '-' 
-                || Input[Index] == '+' ) 
-                && !IsEnd())
+            while (!IsEnd())
             {
                 line += Input[Index++];
+
+                if (Index >= Input.Length)
+                    break;
             }
 
             if (line == "")
                 line = "1";
+            if (line == "-")
+                line = "-1";
 
             Number result = new Number(line);
             Index = 0;

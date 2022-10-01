@@ -10,11 +10,18 @@ namespace TestUI
         static void Main(string[] args)
         {
             string line = Console.ReadLine();
-            PolynomialReader reader = new PolynomialReader(line);
-            Polynomial polynomial = reader.Read();
+            ConsoleKey key = ConsoleKey.Z;
 
-            Console.WriteLine(polynomial);
-            Console.WriteLine(polynomial.Simplify());
+            while (key != ConsoleKey.Escape)
+            {
+                PolynomialReader reader = new PolynomialReader(line);
+                Polynomial polynomial = reader.Read();
+                Polynomial simplifiedPolynomial = polynomial.Simplify();
+                Console.WriteLine(simplifiedPolynomial.ToString());
+
+                line = Console.ReadLine();
+                key = Console.ReadKey().Key;
+            }
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿
 namespace Math.Operands
 {
-    internal class Number
+    public class Number
     {
         public int Value { get; set; }
 
@@ -20,10 +20,10 @@ namespace Math.Operands
         public override string ToString()
         {
             string res = Value >= 0 ? "+" + Value : "" + Value;
-            if (res == "+1")
-                res = "";
-            if (res == "-1")
-                res = "-";
+            //if (res == "+1")
+            //    res = "";
+            //if (res == "-1")
+            //    res = "-";
 
             return res;
         }
@@ -66,8 +66,14 @@ namespace Math.Operands
         public static bool operator >(Number leftOperand, int rightOperand) =>
             leftOperand.Value > rightOperand;
 
+        public static bool operator >=(Number leftOperand, int rightOperand) =>
+            leftOperand.Value >= rightOperand;
+
         public static bool operator <(Number leftOperand, int rightOperand) =>
             leftOperand.Value > rightOperand;
+
+        public static bool operator <=(Number leftOperand, int rightOperand) =>
+            leftOperand.Value <= rightOperand;
 
         #endregion
     }

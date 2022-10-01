@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Math.Reader
 {
-    internal class VariableReader : Reader<Variable>
+    public class VariableReader : Reader<Variable>
     {
         protected override string Input { get; }
         protected int Index { get; set; }

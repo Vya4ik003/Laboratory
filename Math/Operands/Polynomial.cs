@@ -22,7 +22,8 @@ namespace Math.Operands
 
         private void PrimarySimplify()
         {
-            Monomials.RemoveAll(_ => _.Coefficient.Value == 0);
+            if (Monomials.Count > 1)
+                Monomials.RemoveAll(_ => _.Coefficient.Value == 0);
         }
 
         public Monomial TryParse()
@@ -30,7 +31,10 @@ namespace Math.Operands
             if (Monomials.Count == 1)
                 return Monomials[0];
             else
-                throw new Exception();
+            {
+                Simplify();
+                return Monomials[0];
+            }
 
         }
 
@@ -47,11 +51,14 @@ namespace Math.Operands
 
                     if (sameMonomials.Count == 1)
                         pol.Monomials.Add(mon);
-                    
-                    for (int i = 0; i < sameMonomials.Count - 1; i++)
+
+                    for (int i = 0; i < sameMonomials.Count - 1; i+=2)
                     {
                         pol += sameMonomials[i] + sameMonomials[i + 1];
                     }
+
+                    if (sameMonomials.Count % 2 != 0)
+                        pol += sameMonomials.Last();
 
                     Monomial newMonomial = pol.TryParse();
                     monomials.Add(newMonomial);
@@ -67,7 +74,8 @@ namespace Math.Operands
         public override string ToString()
         {
             string result = "";
-            Monomials.ForEach(_ => result += _);
+            Monomials = Monomials.OrderByDescending(_ => _.Variable.Power.Value).ToList();
+            Monomials.ForEach(_ => result += _.ToStringSimplified());
             result = result.Trim('+');
 
             return result;
@@ -90,6 +98,14 @@ namespace Math.Operands
             Polynomial result = new Polynomial();
             leftOperand.Monomials.ForEach(_ => result.Monomials.Add(_));
             rightOperand.Monomials.ForEach(_ => result.Monomials.Add(-_));
+            return result;
+        }
+
+        public static Polynomial operator +(Polynomial leftOperand, Monomial rightOperand)
+        {
+            Polynomial result = new Polynomial();
+            leftOperand.Monomials.ForEach(_ => result.Monomials.Add(_));
+            result.Monomials.Add(rightOperand);
             return result;
         }
 
